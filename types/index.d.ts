@@ -1,3 +1,4 @@
+import * as _ from 'ts-toolbelt';
 declare var RA: RamdaAdjunct.Static;
 // TypeScript Version: 2.4
 
@@ -40,6 +41,11 @@ declare namespace RamdaAdjunct {
     interface Dictionary<T> { [key: string]: T; }
 
     type DictPred<T> = (value: T, key: string) => boolean;
+
+    /**
+     * Property/Method path for an object/array.
+     */
+    type Path = Array<(number | string)>;
 
     interface Static {
         /**
@@ -846,6 +852,13 @@ declare namespace RamdaAdjunct {
             (keys: U[], values: T[]): { [k: string]: V };
             (keys: U[]): (values: T[]) => { [k: string]: V };
         };
+
+        /**
+         * Returns true if the specified object property at given path satisfies the given predicate; false otherwise.
+         */
+        pathNotSatisfies<T, U>(pred: (val: T) => boolean, path: Path, obj: U): boolean;
+        pathNotSatisfies<T, U>(pred: (val: T) => boolean, path: Path): (obj: U) => boolean;
+        pathNotSatisfies<T, U>(pred: (val: T) => boolean): _.F.Curry<(a: Path, b: U) => boolean>;
 
         /**
          * Creates a new list out of the supplied object by applying the function to each key/value pairing.
